@@ -28,7 +28,7 @@ body {
   width: 600px;
 }
 
-.quiz {
+#quizDIV {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,4 +60,45 @@ background-color: #e74c3c;
 
 #loadQuiz:hover {
   background-color: #c0392b;
+}
+
+#quizTitleForm {
+  border-radius: 5px;
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  width: 100%;
+}
+
+#quizTitleForm:focus {
+  color: green;
+}
+
+.quizQuestionsForm {
+  border-radius: 5px;
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  width: 100%;
+}
+
+.formLine {
+  width: 100%;
+}
+
+#formButtons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+#createNextQuestion {
+  background-color: #2ecc71;
+}
+
+#finishQuizForm {
+  background-color: #3498db;
+}
+
+#backToMainPage {
+  background-color: #e74c3c;
 }
