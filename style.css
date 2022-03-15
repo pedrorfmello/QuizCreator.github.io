@@ -100,13 +100,22 @@ body {
 #createNextQuestion {
   background-color: #2ecc71;
 }
+#createNextQuestion:hover {
+  background-color: #27ae60;
+}
 
 #finishQuizForm {
   background-color: #3498db;
 }
+#finishQuizForm:hover {
+  background-color: #2980b9;
+}
 
 #backToMainPage {
   background-color: #e74c3c;
+}
+#backToMainPage:hover {
+  background-color: #c0392b;
 }
 
 .quizAnswBtn {
