@@ -1,4 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////DECLARAÇÃO DAS VARIÁVEIS GLOBAIS
+const create = document.createElement.bind(document);
 const loadQuizButton = document.getElementById('loadQuiz');
 const quiz = document.getElementById('quizDIV');
 const createQuiz = document.getElementById('createQuiz');
@@ -11,6 +12,28 @@ let contador = 0;
 const loadQuizButtonFunction = () => {
   if (localStorage.length === 0) {
     alert('Não há Quiz salvos');
+  } else {
+    quiz.innerHTML = '\n      <ol id="quizLoadList"></ol>\n      <button class="initButton" id="backToHome">Voltar</button>\n    '
+    const allQuiz = Object.keys(localStorage);
+    allQuiz.forEach((element) => {
+      const listItemCount = document.getElementsByTagName('li').length
+      if (listItemCount < 6){
+        const quizList = document.querySelector('#quizLoadList');
+        const quizObj = JSON.parse(localStorage.getItem(element));
+        const listItem = create('li');
+  
+        listItem.innerHTML = element;
+        listItem.className = "loadObjectItemList";
+        listItem.id = element;
+        
+        quizList.addEventListener("click", playLoadedQuiz)
+        quizList.appendChild(listItem);
+      } else {
+        return;
+      }
+    });
+    const backToHome = document.getElementById('backToHome');
+    backToHome.addEventListener("click", homePage);
   }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +102,7 @@ createQuiz.addEventListener("click", () => {
   score = 0;
   contador = 0;
 });
-loadQuizButton.addEventListener("click", loadQuizButtonFunction);
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 const quizStructure = (index) => {
@@ -95,9 +118,9 @@ const quizStructure = (index) => {
   const verifyAnswer = (event) => {
     if (event.target.id === correctAnswer) {
       score += 1;
-      finishQuizFormFunction();
+      quizEngine();
     } else {
-      finishQuizFormFunction();
+      quizEngine();
     }
   };
 
@@ -120,7 +143,7 @@ const quizEnd = () => {
   quiz.innerHTML = `\n      <h2>Você acertou:</h2>\n      <div>\n        <h3>${score}/${testeQuiz.length}</h3>\n      </div>\n      <div>\n        <button class="initButton" id="playAgain">Tentar Novamente</button>\n        <button class="initButton" id="backToHomePage">Voltar ao Inicio</button>\n      </div>\n    `
   const playAgain = document.getElementById('playAgain');
   const backToHomePage = document.getElementById('backToHomePage');
-
+  
   playAgain.addEventListener("click", playAgainFunction);
   backToHomePage.addEventListener("click", homePage);
 
@@ -129,20 +152,72 @@ const quizEnd = () => {
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 const finishQuizFormFunction = () => {
-  if (testeQuiz.length === 0) {
+  let titleNullValueCheck = document.getElementById('quizTitleForm').value;
+  if (titleNullValueCheck === '') {
     alert('Crie ao menos uma pergunta')
   } else {
+    createNextQuestion();
+    saveLocalStorage();
+  }
+};
+
+const quizEngine = () => {
+  if (contador < testeQuiz.length) {
+    quizStructure(contador);
+    contador += 1;
+  } else {
+    quizEnd();
+  }
+};
+
+const setArrayNameToLocalStorage = () => {
+  quiz.innerHTML = '\n      <h2>Defina um nome para o seu Quiz</h2>\n      <input type="text" class="quizQuestionsForm" id="quizTitleSave" maxlength="50">\n      <div>\n        <button class="initButton" id="saveAndPlay">Salvar e Jogar</button>\n      </div>\n    '
+  const saveAndPlay = document.getElementById('saveAndPlay');
+  saveAndPlay.addEventListener("click", () => {
+    const quizTitle = document.getElementById('quizTitleSave').value
+    localStorage.setItem(quizTitle, JSON.stringify(testeQuiz));
+
+    quizStructure(contador);
+  })
+}
+
+const saveLocalStorage = () => {
+  quiz.innerHTML = '\n      <h2>Gostaria de salvar esse Quiz antes de jogar?</h2>\n      <div id="localStorageDIV">\n        <button class="initButton" id="saveQuestLocalStorage">Sim</button>\n        <button class="initButton" id="dontSaveLocalStorage">Não</button>\n      </div>\n    '  
+  const save = document.getElementById('saveQuestLocalStorage');
+  const dontSave = document.getElementById('dontSaveLocalStorage');
+  save.addEventListener("click", setArrayNameToLocalStorage)
+  dontSave.addEventListener("click", () => {
     if (contador < testeQuiz.length) {
       quizStructure(contador);
       contador += 1;
     } else {
       quizEnd();
     }
-  }
-};
+  })
+}
 
+const playLoadedQuiz = (event) => {
+  const quizName = event.target.innerHTML
+  const quizObj = JSON.parse(localStorage.getItem(quizName))
+  testeQuiz = quizObj;
+  quizStructure(0);
+}
 
-
+loadQuizButton.addEventListener("click", loadQuizButtonFunction);
+//function colocarItensDoLocalStorage() {
+//  
+//
+//  for (let i = 0; i < Object.keys(tarefasDoLocal).length; i += 1) {
+//    const itemDaLista = create('li');
+//    itemDaLista.innerHTML = tarefasDoLocal[i].innerHTML;
+//    itemDaLista.className = tarefasDoLocal[i].className;
+//    itemDaLista.id = tarefasDoLocal[i].id;
+//    itemDaLista.addEventListener('click', colorirFundoDoItemDaListaAoClicar);
+//    itemDaLista.addEventListener('dblclick', riscarEDesriscarElementoDaLista);
+//    listaDeTarefas.appendChild(itemDaLista);
+//  }
+//}
 
 
