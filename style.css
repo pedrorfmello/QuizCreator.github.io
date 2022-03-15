@@ -91,9 +91,9 @@ body {
 }
 
 #formButtons {
-  margin-top: 20px;
   display: flex;
   justify-content: space-evenly;
+  margin-top: 20px;
   width: 100%;
 }
 
@@ -218,13 +218,15 @@ h3 {
 }
 
 .loadObjectItemList {
-  cursor: pointer;
-  padding: 1rem;
+  align-items: center;
   background-color: #2ecc71;
-  color: white;
-  font-family: 'Poppins', sans-serif;
   border-radius: 5px;
+  color: white;
+  display: flex;
+  font-family: 'Poppins', sans-serif;
+  justify-content: space-between;
   margin-top: 10px;
+  padding: 1rem;
   width: 100%;
 }
 .loadObjectItemList:hover {
@@ -232,9 +234,25 @@ h3 {
 }
 
 #backToHome {
+  background-color: #3498db;
   width: 300px;
-  background-color: #e74c3c;
 }
 #backToHome:hover {
   background-color: #c0392b;
+}
+
+.deleteItemStorageBtn {
+  background-color: #e74c3c;
+  margin-top: 0;
+}
+
+.playStoredQuiz {
+  background-color: #f1c40f;
+  margin: 0 15px 0 0;
+}
+
+#playAndDeleteBtnsDiv {
+  display: flex;
+  flex-wrap: nowrap;
+  min-width: 175px;
 }

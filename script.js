@@ -3,10 +3,32 @@ const create = document.createElement.bind(document);
 const loadQuizButton = document.getElementById('loadQuiz');
 const quiz = document.getElementById('quizDIV');
 const createQuiz = document.getElementById('createQuiz');
-const arrayDeTeste = [{title: 'Idade de Pedro Mello', a: '15', b: '18', c: '22', d: '25', answer: "d"},{title: 'Cor de fundo do site', a: 'Preto', b: 'Branco', c: 'Azul', d: 'Vermelho', answer: "c"},{title: 'Placa de Video do PC', a: '1050', b: '1060', c: '1070', d: '1080', answer: "b"}];
 let testeQuiz = [];
 let score = 0;
 let contador = 0;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////FUNÇÃO QUE CARREGA OS QUIZES GRAVADOS NO LOCALSTORAGE
+const playLoadedQuiz = (event) => {
+  const quizName = (event.target).parentNode.parentNode.firstChild.innerHTML
+  const quizObj = JSON.parse(localStorage.getItem(quizName))
+  testeQuiz = quizObj;
+  if (contador < testeQuiz.length) {
+    quizStructure(contador);
+    contador += 1;
+  } else {
+    quizEnd();
+  }
+}
+
+const deleteLoadedQuiz = (event) => {
+  const quizName = (event.target).parentNode.parentNode.firstChild.innerHTML
+  localStorage.removeItem(quizName);
+  if (localStorage.length === 0) {
+    homePage();
+  } else {
+    loadQuizButtonFunction();
+  }
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////FUNÇÃO QUE CARREGA OS QUIZES GRAVADOS NO LOCALSTORAGE
 const loadQuizButtonFunction = () => {
@@ -19,14 +41,35 @@ const loadQuizButtonFunction = () => {
       const listItemCount = document.getElementsByTagName('li').length
       if (listItemCount < 6){
         const quizList = document.querySelector('#quizLoadList');
-        const quizObj = JSON.parse(localStorage.getItem(element));
+        const deleteBtn = document.getElementById('deleteThisQuiz');
         const listItem = create('li');
-  
-        listItem.innerHTML = element;
+        const delBtn = create('button');
+        const playBtn = create('button');
+        const div = create('div');
+        const h4 = create('h4');
+
+        div.id = "playAndDeleteBtnsDiv"
+        h4.innerHTML = element;
+        
+        delBtn.innerHTML = "Excluir";
+        delBtn.className = "initButton deleteItemStorageBtn";
+        delBtn.id = "deleteItemBtn";
+
+        playBtn.innerHTML = "Jogar";
+        playBtn.className = "initButton playStoredQuiz";
+        playBtn.id = "playStoredBtn";
+
         listItem.className = "loadObjectItemList";
         listItem.id = element;
+
+        listItem.appendChild(h4);
+        listItem.appendChild(div)
+        div.appendChild(playBtn)
+        div.appendChild(delBtn)
         
-        quizList.addEventListener("click", playLoadedQuiz)
+        playBtn.addEventListener("click", playLoadedQuiz);
+        delBtn.addEventListener("click", deleteLoadedQuiz)
+        
         quizList.appendChild(listItem);
       } else {
         return;
@@ -36,6 +79,8 @@ const loadQuizButtonFunction = () => {
     backToHome.addEventListener("click", homePage);
   }
 }
+
+loadQuizButton.addEventListener("click", loadQuizButtonFunction);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////FUNÇÃO QUE RETORNA A PAGINA INICIAL DO QUIZ
 const homePage = () => {
@@ -140,6 +185,9 @@ const playAgainFunction = () => {
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 const quizEnd = () => {
+  if (score > testeQuiz.length) {
+    score = testeQuiz.length;
+  };
   quiz.innerHTML = `\n      <h2>Você acertou:</h2>\n      <div>\n        <h3>${score}/${testeQuiz.length}</h3>\n      </div>\n      <div>\n        <button class="initButton" id="playAgain">Tentar Novamente</button>\n        <button class="initButton" id="backToHomePage">Voltar ao Inicio</button>\n      </div>\n    `
   const playAgain = document.getElementById('playAgain');
   const backToHomePage = document.getElementById('backToHomePage');
@@ -154,11 +202,25 @@ const quizEnd = () => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const finishQuizFormFunction = () => {
-  let titleNullValueCheck = document.getElementById('quizTitleForm').value;
-  if (titleNullValueCheck === '') {
+  const title = document.getElementById('quizTitleForm');
+  const a_answ = document.getElementById('responseA');
+  const b_answ = document.getElementById('responseB');
+  const c_answ = document.getElementById('responseC');
+  const d_answ = document.getElementById('responseD');
+  const conditionEqual = title.value === '' && a_answ.value === '' && b_answ.value === '' && c_answ.value === '' && d_answ.value === '';
+  const conditionDiff = title.value !== '' || a_answ.value !== '' || b_answ.value !== '' || c_answ.value !== '' || d_answ.value !== '';
+
+  if (testeQuiz.length === 0 && conditionEqual) {
     alert('Crie ao menos uma pergunta')
-  } else {
+  } else if (testeQuiz.length === 0 && conditionDiff) {
     createNextQuestion();
+    saveLocalStorage();
+  } else if (conditionEqual){
+    saveLocalStorage();
+  } else if (conditionDiff){
+    createNextQuestion();
+    saveLocalStorage();
+  } else {
     saveLocalStorage();
   }
 };
@@ -173,13 +235,18 @@ const quizEngine = () => {
 };
 
 const setArrayNameToLocalStorage = () => {
-  quiz.innerHTML = '\n      <h2>Defina um nome para o seu Quiz</h2>\n      <input type="text" class="quizQuestionsForm" id="quizTitleSave" maxlength="50">\n      <div>\n        <button class="initButton" id="saveAndPlay">Salvar e Jogar</button>\n      </div>\n    '
+  quiz.innerHTML = '\n      <h2>Defina um nome para o seu Quiz</h2>\n      <input type="text" class="quizQuestionsForm" id="quizTitleSave" maxlength="30">\n      <div>\n        <button class="initButton" id="saveAndPlay">Salvar e Jogar</button>\n      </div>\n    '
   const saveAndPlay = document.getElementById('saveAndPlay');
   saveAndPlay.addEventListener("click", () => {
-    const quizTitle = document.getElementById('quizTitleSave').value
+    const quizTitle = document.getElementById('quizTitleSave').value;
     localStorage.setItem(quizTitle, JSON.stringify(testeQuiz));
 
-    quizStructure(contador);
+    if (contador < testeQuiz.length) {
+      quizStructure(contador);
+      contador += 1;
+    } else {
+      quizEnd();
+    }
   })
 }
 
@@ -197,27 +264,3 @@ const saveLocalStorage = () => {
     }
   })
 }
-
-const playLoadedQuiz = (event) => {
-  const quizName = event.target.innerHTML
-  const quizObj = JSON.parse(localStorage.getItem(quizName))
-  testeQuiz = quizObj;
-  quizStructure(0);
-}
-
-loadQuizButton.addEventListener("click", loadQuizButtonFunction);
-//function colocarItensDoLocalStorage() {
-//  
-//
-//  for (let i = 0; i < Object.keys(tarefasDoLocal).length; i += 1) {
-//    const itemDaLista = create('li');
-//    itemDaLista.innerHTML = tarefasDoLocal[i].innerHTML;
-//    itemDaLista.className = tarefasDoLocal[i].className;
-//    itemDaLista.id = tarefasDoLocal[i].id;
-//    itemDaLista.addEventListener('click', colorirFundoDoItemDaListaAoClicar);
-//    itemDaLista.addEventListener('dblclick', riscarEDesriscarElementoDaLista);
-//    listaDeTarefas.appendChild(itemDaLista);
-//  }
-//}
-
-
