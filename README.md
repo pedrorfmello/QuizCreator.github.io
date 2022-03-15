@@ -9,5 +9,5 @@
 
 ## This project allows you to creat a Quiz with how many questions you want to, besides offer a option to save the created Quiz to play later.
 
-#### This is a personal project that i used to put my knowlege on proof, and code refactoring with time as i acquire more knowlege.
-#### To get him to work just open https://pedrorfmello.github.io/QuizCreator.github.io/
+#### This is a personal project that i did to put my knowlege to the proof. I will refactor it as i acquire more knowledge.
+#### To use it, just open: https://pedrorfmello.github.io/QuizCreator.github.io/
