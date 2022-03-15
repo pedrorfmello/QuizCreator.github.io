@@ -10,6 +10,7 @@
 <body>
   <div class="quizContainer" id="teste">
     <div id="quizDIV">
+      <img src="src/quizLogo.png" alt="Quiz Logo">
       <div id="initButtonsContainer">
         <button id="loadQuiz" class="initButton">Carregar Quiz</button>
         <button id="createQuiz" class="initButton">Criar Quiz</button>
@@ -23,7 +24,10 @@
 <!--
 <h2 id="question">QuizCreator</h2>
 
-
+      <div id="initButtonsContainer">
+        <button id="loadQuiz" class="initButton">Carregar Quiz</button>
+        <button id="createQuiz" class="initButton">Criar Quiz</button>
+      </div>
 
       <div class="formLine">
         <label for="quizTitleForm">Questão</label>
@@ -45,11 +49,29 @@
         <label for="responseD">D.</label>
         <input type="text" name="answer" id="responseD" class="quizQuestionsForm">
       </div>
+      <div class="formLine">
+        <label for="rightAnswer">Resposta correta</label>
+        <select id="rightAnswer" name="rightAnswerQst" class="quizQuestionsForm">
+          <option value="a">A</option>
+          <option value="b">B</option>
+          <option value="c">C</option>
+          <option value="d">D</option>
+        </select>
+      </div>
       <div id="formButtons">
         <button class="initButton" id="createNextQuestion">Criar Próxima Pergunta</button>
         <button class="initButton" id="finishQuizForm">Finalizar Criação do Quiz</button>
+        <button class="initButton" id="backToMainPage">Sair</button>
       </div>
+    </div>
 
-
+          <h2 >Você acertou:</h2>
+      <div>
+        <h3>7/8</h3>
+      </div>
+      <div>
+        <button class="initButton" id="playAgain">Jogar De novo</button>
+        <button class="initButton" id="backToHomePage">Voltar ao Inicio</button>
+      </div>
 
 -->
