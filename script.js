@@ -188,7 +188,7 @@ const quizEnd = () => {
   if (score > testeQuiz.length) {
     score = testeQuiz.length;
   };
-  quiz.innerHTML = `\n      <h2>Você acertou:</h2>\n      <div>\n        <h3>${score}/${testeQuiz.length}</h3>\n      </div>\n      <div>\n        <button class="initButton" id="playAgain">Tentar Novamente</button>\n        <button class="initButton" id="backToHomePage">Voltar ao Inicio</button>\n      </div>\n    `
+  quiz.innerHTML = `\n      <h2>Você acertou:</h2>\n      <div>\n        <h3>${score}/${testeQuiz.length}</h3>\n      </div>\n      <div id="endGameDiv">\n        <button class="initButton" id="playAgain">Tentar Novamente</button>\n        <button class="initButton" id="backToHomePage">Voltar ao Inicio</button>\n      </div>\n    `
   const playAgain = document.getElementById('playAgain');
   const backToHomePage = document.getElementById('backToHomePage');
   
